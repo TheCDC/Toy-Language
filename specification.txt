@@ -1,26 +1,14 @@
 # A simple programming language for learning purposes
 
-# Beware that the contents of this file are parsed literally.
-
-body = [\s]*{statement}*[\s]*
-
-# let statements be only assignment or function call
-statement = {assignment}|{imperative};
-
-# simple name = value assignment
-assignment = {identifier}[\s]*=[\s]*{expression}
-
-# simple func(val)
-imperative = {identifier}({expression})
-
-# allow expression to be math only
-expression = ({operator}|{identifier})+
-
 # allow only the four arithmetic operators
-operator = ^[+-/*]$
+operator = [\s]*[=+-/\*;]+[\s]*
 
 # allow only integer literals
-literal = [0-9]*
+literal = (?<![a-zA-Z0-9])[-]?[0-9]+
 
 # allows identifiers to be one or more alphanumerics
 identifier = [a-zA-Z]+
+
+open_brace = {
+
+close_brace = }

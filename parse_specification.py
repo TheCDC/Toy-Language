@@ -1,33 +1,27 @@
 from pprint import pprint
+import re
+
+
+def is_definition_line(s):
+    return not(s.startswith("#") or len(s.strip()) == 0)
+
+
+def parse_line(s):
+    s = s.strip()
+    idx = s.find("=")
+    name = s[:idx].strip()
+    definition = '(?P<{}>{})'.format(name, s[idx + 1:].strip())
+    return {name: definition}
 
 
 def parse_file(fname):
-    definitions = {}
+    definition_pairs = {}
     with open(fname) as f:
         for line in f:
-            s = line.strip()
-            if s.startswith("#") or len(s.strip()) == 0:
-                continue
+            if is_definition_line(line):
+                definition_pairs.update(parse_line(line))
             else:
-                # print(line)
-                idx = s.find("=")
-                name = s[:idx].strip()
-                # wrap each definition with parens for nesting
-                definition = "(" + s[idx + 1:].strip() + ")"
-                print(name, definition)
-                definitions.update({name: definition})
-    return definitions
-
+                continue
+    return definition_pairs
 
 definitions = parse_file("specification.txt")
-pprint(definitions)
-
-print(definitions["body"].format(**definitions))
-
-
-def test_parse_file():
-    cases = [
-    """x = 10
-
-    """,
-    ]
